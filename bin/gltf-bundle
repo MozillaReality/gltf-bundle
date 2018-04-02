@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+const program = require("commander");
+const createBundle = require("../src/index");
+const fs = require("fs-extra");
+const path = require("path");
+const package = fs.readJSONSync(path.join(__dirname, "..", "package.json"));
+
+program
+  .version(package.version)
+  .usage('<configPath> <outPath>')
+  .action((configPath, outPath) => {
+    execute(configPath, outPath).then(() => {
+      process.exit(0);
+    }).catch((err) => {
+      throw err;
+    });
+  });
+
+async function execute(configPath, outPath) {
+  await createBundle(configPath, outPath);
+
+  console.log(`Wrote bundle to ${outPath}`);
+}
+
+program.parse(process.argv);
+
+if (program.args.length === 0) {
+  program.outputHelp();
+}

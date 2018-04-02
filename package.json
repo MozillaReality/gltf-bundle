@@ -1,0 +1,25 @@
+{
+  "name": "gltf-bundle",
+  "version": "1.0.0",
+  "bin": "./bin/gltf-bundle",
+  "main": "src/index.js",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MozillaReality/gltf-bundle.git"
+  },
+  "scripts": {
+    "start": "node ./bin/gltf-bundle",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "@robertlong/fbx2gltf": "^0.10.3",
+    "commander": "^2.15.1",
+    "fbx2gltf": "^0.9.5",
+    "fs-extra": "^5.0.0",
+    "gltf-component-data": "^0.1.0",
+    "gltf-content-hash": "^0.3.0",
+    "gltf-import-export": "^1.0.7",
+    "gltf-unlit-generator": "^0.2.0"
+  }
+}

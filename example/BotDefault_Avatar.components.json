@@ -1,0 +1,14 @@
+{
+  "scenes": {
+    "Root Scene": {
+      "loop-animation": {
+        "clip": "idle_eyes"
+      }
+    }
+  },
+  "nodes": {
+    "Head": {
+      "scale-audio-feedback": ""
+    }
+  }
+}

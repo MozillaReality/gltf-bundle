@@ -1,0 +1,15 @@
+{
+  "name": "default-avatar",
+  "version": "0.0.1",
+  "meta": {
+    "title": "Default Avatar",
+    "description": "The default avatar for Mozilla Social MR"
+  },
+  "assets": [
+    {
+      "name": "BotDefault_Avatar",
+      "src": "BotDefault_Avatar.fbx",
+      "components": ["BotDefault_Avatar.components.json"]
+    }
+  ]
+}

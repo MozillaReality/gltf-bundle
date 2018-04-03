@@ -6,7 +6,7 @@ const addComponentData = require("gltf-component-data");
 const generateUnlitTextures = require("gltf-unlit-generator");
 const contentHashUrls = require("gltf-content-hash");
 
-module.exports = async function createBundle(configPath, destPath, makeBundleDir) {
+module.exports = async function createBundle(configPath, destPath) {
   if (!fs.existsSync(configPath)) {
     throw new Error(`config file: ${configPath} does not exist`);
   }
@@ -23,8 +23,8 @@ module.exports = async function createBundle(configPath, destPath, makeBundleDir
     assets: []
   };
 
-  if (makeBundleDir) {
-    absoluteDestPath = path.join(absoluteDestPath, bundle.name);
+  if (config.output && config.output.filePath) {
+    absoluteDestPath = path.join(absoluteDestPath,  config.output.filePath);
   }
 
   for (const asset of config.assets) {

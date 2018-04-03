@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "json.schemas": [
+    {
+      "fileMatch": ["*.bundle.config.json"],
+      "url": "./schema/gltf-bundle-config.json"
+    }
+  ]
+}

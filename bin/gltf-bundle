@@ -43,7 +43,7 @@ async function execute(configPath) {
     const matches = await glob("**/*.bundle.config.json", { absolute: true });
 
     for (const match of matches) {
-      const bundleOutPath = await createBundle(match, outPath, true);
+      const bundleOutPath = await createBundle(match, outPath);
       console.log(`Wrote bundle to ${bundleOutPath}`);
     }
   }

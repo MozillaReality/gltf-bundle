@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
+  "$schema": "http://json-schema.org/draft-06/schema",
   "type": "object",
   "description": "A configuration file for use in the gltf-bundle tool.",
   "properties": {
@@ -56,5 +56,5 @@
       "minItems": 1
     }
   },
-  "required": ["name", "assets"]
+  "required": ["name", "assets", "version"]
 }

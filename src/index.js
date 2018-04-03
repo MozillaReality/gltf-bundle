@@ -5,6 +5,7 @@ const { ConvertGLBtoGltf } = require("gltf-import-export");
 const addComponentData = require("gltf-component-data");
 const generateUnlitTextures = require("gltf-unlit-generator");
 const contentHashUrls = require("gltf-content-hash");
+var Ajv = require("ajv");
 
 module.exports = async function createBundle(configPath, destPath) {
   if (!fs.existsSync(configPath)) {
@@ -13,7 +14,19 @@ module.exports = async function createBundle(configPath, destPath) {
 
   let absoluteDestPath = path.resolve(destPath);
 
+  const schema = await fs.readJson(
+    path.join(__dirname, "..", "schema", "gltf-bundle-config.json")
+  );
   const config = await fs.readJson(configPath);
+
+  const ajv = new Ajv();
+  ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"));
+  const valid = ajv.validate(schema, config);
+  if (!valid) {
+    const message = ajv.errors.map(e => "  " + e.message).join("\n");
+    throw `${configPath} invalid:\n${message}`;
+  }
+
   const configDir = path.dirname(configPath);
 
   const bundle = {

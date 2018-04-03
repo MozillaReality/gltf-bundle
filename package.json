@@ -1,6 +1,6 @@
 {
   "name": "gltf-bundle",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "bin": "./bin/gltf-bundle",
   "main": "src/index.js",
   "license": "MPL-2.0",
@@ -13,7 +13,6 @@
     "test": "mocha"
   },
   "dependencies": {
-    "@robertlong/fbx2gltf": "^0.10.3",
     "commander": "^2.15.1",
     "fbx2gltf": "^0.9.5",
     "fs-extra": "^5.0.0",

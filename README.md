@@ -11,7 +11,23 @@ npm install -g gltf-bundle
 
 ## Usage
 
-Example:
+
 ```
-gltf-bundle ./path-to-bundle/avatar.bundle.json ./out
+Usage: gltf-bundle [configPath]
+
+  Options:
+
+    -V, --version   output the version number
+    -o --out <out>  Bundle output path (required).
+    -h, --help      output usage information
+
+  Examples:
+    1. Search all subdirectories for *.bundle.config.json files and output bundles
+    in out dir.
+
+    $ gltf-bundle -o ./out
+
+    2. Specify a bundle config file and output to the out directory.
+
+    $ gltf-bundle ./avatar.bundle.config.json -o ./out
 ```

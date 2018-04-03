@@ -6,12 +6,12 @@ const addComponentData = require("gltf-component-data");
 const generateUnlitTextures = require("gltf-unlit-generator");
 const contentHashUrls = require("gltf-content-hash");
 
-module.exports = async function createBundle(configPath, destPath) {
+module.exports = async function createBundle(configPath, destPath, makeBundleDir) {
   if (!fs.existsSync(configPath)) {
     throw new Error(`config file: ${configPath} does not exist`);
   }
 
-  const absoluteDestPath = path.resolve(destPath);
+  let absoluteDestPath = path.resolve(destPath);
   
   const config = await fs.readJson(configPath);
   const configDir = path.dirname(configPath);
@@ -22,6 +22,10 @@ module.exports = async function createBundle(configPath, destPath) {
     meta: config.meta,
     assets: []
   };
+
+  if (makeBundleDir) {
+    absoluteDestPath = path.join(absoluteDestPath, bundle.name);
+  }
 
   for (const asset of config.assets) {
     // Convert the src asset to .gltf and write all resulting files to destPath.
@@ -52,7 +56,11 @@ module.exports = async function createBundle(configPath, destPath) {
     });
   }
 
-  await fs.writeJson(path.join(absoluteDestPath, config.name + ".bundle.json"), bundle);
+  const bundlePath = path.join(absoluteDestPath, config.name + ".bundle.json");
+
+  await fs.writeJson(bundlePath, bundle);
+
+  return bundlePath;
 }
 
 async function getComponentData(configDir, componentObjOrUrl) {

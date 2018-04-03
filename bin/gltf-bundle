@@ -4,27 +4,53 @@ const program = require("commander");
 const createBundle = require("../src/index");
 const fs = require("fs-extra");
 const path = require("path");
+const glob = require("glob-promise");
 const package = fs.readJSONSync(path.join(__dirname, "..", "package.json"));
 
 program
   .version(package.version)
-  .usage('<configPath> <outPath>')
-  .action((configPath, outPath) => {
-    execute(configPath, outPath).then(() => {
-      process.exit(0);
-    }).catch((err) => {
-      throw err;
-    });
-  });
+  .usage("[configPath]")
+  .option("-o --out <out>", "Bundle output path (required).");
 
-async function execute(configPath, outPath) {
-  await createBundle(configPath, outPath);
+program.on('--help', function(){
+console.log(`
+  Examples:
+    1. Search all subdirectories for *.bundle.config.json files and output bundles
+    in out dir.
 
-  console.log(`Wrote bundle to ${outPath}`);
-}
+    $ gltf-bundle -o ./out
+
+    2. Specify a bundle config file and output to the out directory.
+
+    $ gltf-bundle ./avatar.bundle.config.json -o ./out
+`);
+});
 
 program.parse(process.argv);
 
-if (program.args.length === 0) {
-  program.outputHelp();
+async function execute(configPath) {
+  let outPath = program.out;
+
+  if (outPath === undefined) {
+    console.error("-o or --out parameter was not specified");
+    process.exit(1);
+  }
+
+  if (configPath) {
+    await createBundle(configPath, outPath);
+    console.log(`Wrote bundle to ${outPath}`);
+  } else {
+    const matches = await glob("**/*.bundle.config.json", { absolute: true });
+
+    for (const match of matches) {
+      const bundleOutPath = await createBundle(match, outPath, true);
+      console.log(`Wrote bundle to ${bundleOutPath}`);
+    }
+  }
 }
+
+execute().then(() => {
+  console.log("Done!");
+}).catch((err) => {
+  console.error(err);
+});

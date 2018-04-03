@@ -12,7 +12,7 @@ module.exports = async function createBundle(configPath, destPath) {
   }
 
   let absoluteDestPath = path.resolve(destPath);
-  
+
   const config = await fs.readJson(configPath);
   const configDir = path.dirname(configPath);
 
@@ -24,7 +24,7 @@ module.exports = async function createBundle(configPath, destPath) {
   };
 
   if (config.output && config.output.filePath) {
-    absoluteDestPath = path.join(absoluteDestPath,  config.output.filePath);
+    absoluteDestPath = path.join(absoluteDestPath, config.output.filePath);
   }
 
   for (const asset of config.assets) {
@@ -46,9 +46,15 @@ module.exports = async function createBundle(configPath, destPath) {
       }
     }
 
-    const { fileName: hashedGltfFileName, gltf: hashedGltf } = await contentHashUrls(destGltfPath, gltf, { rename: true });
+    const {
+      fileName: hashedGltfFileName,
+      gltf: hashedGltf
+    } = await contentHashUrls(destGltfPath, gltf, { rename: true });
 
-    await fs.writeJson(path.join(absoluteDestPath, hashedGltfFileName), hashedGltf);
+    await fs.writeJson(
+      path.join(absoluteDestPath, hashedGltfFileName),
+      hashedGltf
+    );
 
     bundle.assets.push({
       name: asset.name,
@@ -57,11 +63,16 @@ module.exports = async function createBundle(configPath, destPath) {
   }
 
   const bundlePath = path.join(absoluteDestPath, config.name + ".bundle.json");
+  const versionedBundlePath = path.join(
+    absoluteDestPath,
+    config.name + "-" + config.version + "-" + Date.now() + ".bundle.json"
+  );
 
   await fs.writeJson(bundlePath, bundle);
+  await fs.writeJson(versionedBundlePath, bundle);
 
-  return bundlePath;
-}
+  return [bundlePath, versionedBundlePath];
+};
 
 async function getComponentData(configDir, componentObjOrUrl) {
   if (typeof componentObjOrUrl === "string") {
@@ -78,7 +89,7 @@ async function convertGltf(asset, configDir, destPath) {
 
   await fs.ensureDir(destPath);
 
-  switch(ext) {
+  switch (ext) {
     case ".fbx":
       const fbxDestPath = await fbx2gltf(srcPath, destGltfPath);
       // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
@@ -104,7 +115,9 @@ async function move(src, dest) {
   const files = await fs.readdir(src);
 
   for (const file of files) {
-    await fs.move(path.join(src, file), path.join(dest, file), { overwrite: true });
+    await fs.move(path.join(src, file), path.join(dest, file), {
+      overwrite: true
+    });
   }
 
   await fs.rmdir(src);
@@ -140,5 +153,7 @@ async function copyFromUri(gltfDir, destPath, uri) {
 
   // URI's must be relative to the gltf file as per the glTF 2.0 spec
   // Copy the file to the relative path, creating directories as necessary.
-  await fs.copy(path.join(gltfDir, uri), path.join(destPath, uri), { overwrite: true });
+  await fs.copy(path.join(gltfDir, uri), path.join(destPath, uri), {
+    overwrite: true
+  });
 }

@@ -12,8 +12,8 @@ program
   .usage("[configPath]")
   .option("-o --out <out>", "Bundle output path (required).");
 
-program.on('--help', function(){
-console.log(`
+program.on("--help", function() {
+  console.log(`
   Examples:
     1. Search all subdirectories for *.bundle.config.json files and output bundles
     in out dir.
@@ -37,20 +37,30 @@ async function execute(configPath) {
   }
 
   if (configPath) {
-    await createBundle(configPath, outPath);
-    console.log(`Wrote bundle to ${outPath}`);
+    const [bundlePath, versionedBundlePath] = await createBundle(
+      configPath,
+      outPath
+    );
+    console.log(`Wrote bundle to ${bundlePath}`);
+    console.log(`Wrote bundle to ${versionedBundlePath}`);
   } else {
     const matches = await glob("**/*.bundle.config.json", { absolute: true });
 
     for (const match of matches) {
-      const bundleOutPath = await createBundle(match, outPath);
-      console.log(`Wrote bundle to ${bundleOutPath}`);
+      const [bundlePath, versionedBundlePath] = await createBundle(
+        match,
+        outPath
+      );
+      console.log(`Wrote bundle to ${bundlePath}`);
+      console.log(`Wrote bundle to ${versionedBundlePath}`);
     }
   }
 }
 
-execute().then(() => {
-  console.log("Done!");
-}).catch((err) => {
-  console.error(err);
-});
+execute()
+  .then(() => {
+    console.log("Done!");
+  })
+  .catch(err => {
+    console.error(err);
+  });

@@ -13,9 +13,9 @@
     "test": "mocha"
   },
   "dependencies": {
+    "@robertlong/fbx2gltf": "^0.10.3",
     "ajv": "^6.4.0",
     "commander": "^2.15.1",
-    "fbx2gltf": "^0.9.5",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "glob-promise": "^3.4.0",

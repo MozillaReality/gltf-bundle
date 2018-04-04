@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs-extra");
-const fbx2gltf = require("fbx2gltf");
+const fbx2gltf = require("@robertlong/fbx2gltf");
 const { ConvertGLBtoGltf } = require("gltf-import-export");
 const addComponentData = require("gltf-component-data");
 const generateUnlitTextures = require("gltf-unlit-generator");

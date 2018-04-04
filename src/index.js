@@ -64,6 +64,11 @@ module.exports = async function createBundle(configPath, destPath) {
       gltf: hashedGltf
     } = await contentHashUrls(destGltfPath, gltf, { rename: true });
 
+    // TODO: FBX2glTF doesn't always remove the .fbm directory. Ensure it is deleted before continuing.
+    try {
+      await fs.remove(path.join(absoluteDestPath, name + ".fbm"));
+    } catch (e) {}
+
     await fs.writeJson(
       path.join(absoluteDestPath, hashedGltfFileName),
       hashedGltf
@@ -108,10 +113,6 @@ async function convertGltf(asset, configDir, destPath) {
       // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
       // https://github.com/facebookincubator/FBX2glTF/issues/91
       await fs.move(path.join(destPath, name + "_out"), destPath);
-      // TODO: FBX2glTF doesn't always remove the .fbm directory. Ensure it is deleted before continuing.
-      try {
-        await fs.remove(path.join(destPath, name + ".fbm"));
-      } catch (e) {}
       break;
     case ".gltf":
       await copyGltfFiles(srcPath, destPath);

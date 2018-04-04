@@ -105,15 +105,13 @@ async function convertGltf(asset, configDir, destPath) {
   switch (ext) {
     case ".fbx":
       const fbxDestPath = await fbx2gltf(srcPath, destGltfPath);
-
+      // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
+      // https://github.com/facebookincubator/FBX2glTF/issues/91
+      await fs.move(path.join(destPath, name + "_out"), destPath);
       // TODO: FBX2glTF doesn't always remove the .fbm directory. Ensure it is deleted before continuing.
       try {
         await fs.remove(path.join(destPath, name + ".fbm"));
       } catch (e) {}
-
-      // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
-      // https://github.com/facebookincubator/FBX2glTF/issues/91
-      await fs.move(path.join(destPath, name + "_out"), destPath);
       break;
     case ".gltf":
       await copyGltfFiles(srcPath, destPath);

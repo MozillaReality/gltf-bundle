@@ -1,4 +1,5 @@
 const path = require("path");
+const glob = require("glob-promise");
 const fs = require("fs-extra");
 const fbx2gltf = require("@robertlong/fbx2gltf");
 const { ConvertGLBtoGltf } = require("gltf-import-export");
@@ -50,11 +51,13 @@ module.exports = async function createBundle(configPath, destPath) {
     // Read the resulting gltf file.
     let gltf = await fs.readJson(destGltfPath);
     await fs.remove(destGltfPath);
-
     // Add component data to gltf.
     if (asset.components) {
       for (const componentObjOrUrl of asset.components) {
-        const componentData = getComponentData(configDir, componentObjOrUrl);
+        const componentData = await getComponentData(
+          configDir,
+          componentObjOrUrl
+        );
         gltf = addComponentData(gltf, componentData);
       }
     }
@@ -65,9 +68,10 @@ module.exports = async function createBundle(configPath, destPath) {
     } = await contentHashUrls(destGltfPath, gltf, { rename: true });
 
     // TODO: FBX2glTF doesn't always remove the .fbm directory. Ensure it is deleted before continuing.
-    try {
-      await fs.remove(path.join(absoluteDestPath, name + ".fbm"));
-    } catch (e) {}
+    const fbmDirectories = await glob(path.join(absoluteDestPath, "*.fbm/"));
+    for (const fbmDirectory of fbmDirectories) {
+      await fs.remove(fbmDirectory);
+    }
 
     await fs.writeJson(
       path.join(absoluteDestPath, hashedGltfFileName),

@@ -14,10 +14,6 @@ module.exports = async function createBundle(configPath, destPath) {
 
   let absoluteDestPath = path.resolve(destPath);
 
-  try {
-    await fs.rmdir(absoluteDestPath);
-  } catch (e) {}
-
   const schema = await fs.readJson(
     path.join(__dirname, "..", "schema", "gltf-bundle-config.json")
   );
@@ -112,7 +108,7 @@ async function convertGltf(asset, configDir, destPath) {
 
       // TODO: FBX2glTF doesn't always remove the .fbm directory. Ensure it is deleted before continuing.
       try {
-        await fs.rmdir(path.join(destGltfPath, name + ".fbm"));
+        await fs.remove(path.join(destPath, name + ".fbm"));
       } catch (e) {}
 
       // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"

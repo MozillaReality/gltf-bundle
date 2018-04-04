@@ -36,6 +36,10 @@ async function execute(configPath) {
     process.exit(1);
   }
 
+  try {
+    await fs.remove(outPath);
+  } catch (e) {}
+
   if (configPath) {
     const [bundlePath, versionedBundlePath] = await createBundle(
       configPath,

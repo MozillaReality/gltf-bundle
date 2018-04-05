@@ -22,6 +22,6 @@
     "gltf-component-data": "^0.1.0",
     "gltf-content-hash": "^0.4.0",
     "gltf-import-export": "^1.0.7",
-    "gltf-unlit-generator": "^0.2.0"
+    "gltf-unlit-generator": "^0.3.0"
   }
 }

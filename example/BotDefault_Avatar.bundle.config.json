@@ -12,7 +12,10 @@
     {
       "name": "BotDefault_Avatar",
       "src": "BotDefault_Avatar.fbx",
-      "components": ["BotDefault_Avatar.components.json"]
+      "components": ["BotDefault_Avatar.components.json"],
+      "gltf-unlit-generator": {
+        "lighten": 0.1
+      }
     }
   ]
 }

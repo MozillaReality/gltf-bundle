@@ -45,8 +45,17 @@ module.exports = async function createBundle(configPath, destPath) {
     // Convert the src asset to .gltf and write all resulting files to destPath.
     const destGltfPath = await convertGltf(asset, configDir, absoluteDestPath);
 
+    const unlitOptions = {};
+
+    if (
+      asset["gltf-unlit-generator"] &&
+      asset["gltf-unlit-generator"].lighten !== undefined
+    ) {
+      unlitOptions.lighten = asset["gltf-unlit-generator"].lighten;
+    }
+
     // Generate unlit textures for gltf. Writes changes to .gltf file
-    await generateUnlitTextures(destGltfPath, absoluteDestPath);
+    await generateUnlitTextures(destGltfPath, absoluteDestPath, unlitOptions);
 
     // Read the resulting gltf file.
     let gltf = await fs.readJson(destGltfPath);

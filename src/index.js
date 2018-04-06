@@ -86,10 +86,16 @@ module.exports = async function createBundle(configPath, destPath) {
       hashedGltf
     );
 
-    bundle.assets.push({
+    const bundledAsset = {
       name: asset.name,
       src: hashedGltfFileName
-    });
+    };
+
+    if (asset.type) {
+      bundledAsset.type = asset.type;
+    }
+
+    bundle.assets.push(bundledAsset);
   }
 
   const bundlePath = path.join(absoluteDestPath, config.name + ".bundle.json");

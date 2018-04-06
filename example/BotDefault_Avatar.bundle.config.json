@@ -11,6 +11,7 @@
   "assets": [
     {
       "name": "BotDefault_Avatar",
+      "type": "entity",
       "src": "BotDefault_Avatar.fbx",
       "components": ["BotDefault_Avatar.components.json"],
       "gltf-unlit-generator": {

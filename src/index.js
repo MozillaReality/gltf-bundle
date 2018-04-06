@@ -45,17 +45,16 @@ module.exports = async function createBundle(configPath, destPath) {
     // Convert the src asset to .gltf and write all resulting files to destPath.
     const destGltfPath = await convertGltf(asset, configDir, absoluteDestPath);
 
-    const unlitOptions = {};
+    const unlitGeneratorConfig = asset["gltf-unlit-generator"] || {};
 
-    if (
-      asset["gltf-unlit-generator"] &&
-      asset["gltf-unlit-generator"].lighten !== undefined
-    ) {
-      unlitOptions.lighten = asset["gltf-unlit-generator"].lighten;
+    if (!unlitGeneratorConfig.skip) {
+      // Generate unlit textures for gltf. Writes changes to .gltf file
+      await generateUnlitTextures(
+        destGltfPath,
+        absoluteDestPath,
+        unlitGeneratorConfig
+      );
     }
-
-    // Generate unlit textures for gltf. Writes changes to .gltf file
-    await generateUnlitTextures(destGltfPath, absoluteDestPath, unlitOptions);
 
     // Read the resulting gltf file.
     let gltf = await fs.readJson(destGltfPath);
@@ -122,7 +121,8 @@ async function convertGltf(asset, configDir, destPath) {
 
   switch (ext) {
     case ".fbx":
-      const fbxDestPath = await fbx2gltf(srcPath, destGltfPath);
+      const args = (asset["FBX2glTF"] && asset["FBX2glTF"].args) || [];
+      const fbxDestPath = await fbx2gltf(srcPath, destGltfPath, args);
       // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
       // https://github.com/facebookincubator/FBX2glTF/issues/91
       await fs.move(path.join(destPath, name + "_out"), destPath);

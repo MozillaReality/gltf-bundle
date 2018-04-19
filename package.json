@@ -1,6 +1,6 @@
 {
   "name": "gltf-bundle",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "bin": "./bin/gltf-bundle",
   "main": "src/index.js",
   "license": "MPL-2.0",

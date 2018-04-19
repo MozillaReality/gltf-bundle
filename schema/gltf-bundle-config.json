@@ -23,6 +23,31 @@
         },
         "description": {
           "type": "string"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "srcset": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },
@@ -59,9 +84,46 @@
                   "type": "string"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "scenes": {
+                      "type": "object",
+                      "properties": {},
+                      "additionalProperties": {
+                        "type": "object"
+                      }
+                    },
+                    "nodes": {
+                      "type": "object",
+                      "properties": {},
+                      "additionalProperties": {
+                        "type": "object"
+                      }
+                    }
+                  }
                 }
               ]
+            }
+          },
+          "gltf-unlit-generator": {
+            "type": "object",
+            "properties": {
+              "skip": {
+                "type": "boolean"
+              },
+              "lighten": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "FBX2glTF": {
+            "type": "object",
+            "properties": {
+              "args": {
+                "type": "array"
+              }
             }
           }
         },

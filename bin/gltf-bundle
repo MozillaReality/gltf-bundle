@@ -33,7 +33,7 @@ execute()
     console.log("Done!");
   })
   .catch(err => {
-    console.error(err);
+    throw err;
   });
 
 async function execute() {

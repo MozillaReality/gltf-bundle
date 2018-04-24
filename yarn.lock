@@ -298,9 +298,9 @@ gltf-component-data@^0.1.0:
     commander "^2.15.0"
     fs-extra "^5.0.0"
 
-gltf-content-hash@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/gltf-content-hash/-/gltf-content-hash-0.5.0.tgz#4e3027454ba09fe8ac4feb571dea920f998ce01e"
+gltf-content-hash@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/gltf-content-hash/-/gltf-content-hash-0.5.2.tgz#a1fd688ea75c710344095eedfcdcf9b9de445ab3"
   dependencies:
     commander "^2.15.0"
     fs-extra "^5.0.0"

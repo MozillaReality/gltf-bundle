@@ -28,7 +28,15 @@ program.on("--help", function() {
 
 program.parse(process.argv);
 
-async function execute(configPath) {
+execute()
+  .then(() => {
+    console.log("Done!");
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+async function execute() {
   let outPath = program.out;
 
   if (outPath === undefined) {
@@ -40,31 +48,29 @@ async function execute(configPath) {
     await fs.remove(outPath);
   } catch (e) {}
 
+  let globPath = "**/*.bundle.config.json";
+
+  let configPath;
+
+  if (program.args.length > 0) {
+    configPath = program.args[0];
+  } else {
+    configPath = "";
+  }
+
   if (configPath) {
+    configPath = configPath.endsWith("/") ? configPath : configPath + "/";
+    globPath = configPath + globPath;
+  }
+
+  const matches = await glob(globPath, { absolute: true });
+
+  for (const match of matches) {
     const [bundlePath, versionedBundlePath] = await createBundle(
-      configPath,
+      match,
       outPath
     );
     console.log(`Wrote bundle to ${bundlePath}`);
     console.log(`Wrote bundle to ${versionedBundlePath}`);
-  } else {
-    const matches = await glob("**/*.bundle.config.json", { absolute: true });
-
-    for (const match of matches) {
-      const [bundlePath, versionedBundlePath] = await createBundle(
-        match,
-        outPath
-      );
-      console.log(`Wrote bundle to ${bundlePath}`);
-      console.log(`Wrote bundle to ${versionedBundlePath}`);
-    }
   }
 }
-
-execute()
-  .then(() => {
-    console.log("Done!");
-  })
-  .catch(err => {
-    console.error(err);
-  });

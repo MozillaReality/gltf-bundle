@@ -42,6 +42,15 @@ module.exports = async function createBundle(configPath, destPath) {
     absoluteDestPath = path.join(absoluteDestPath, config.output.filePath);
   }
 
+  if (bundle.meta && bundle.meta.images) {
+    for (const image of bundle.meta.images) {
+      image.srcset = await contentHashAndCopy(
+        path.join(configDir, image.srcset),
+        absoluteDestPath
+      );
+    }
+  }
+
   for (const asset of config.assets) {
     // Convert the src asset to .gltf and write all resulting files to destPath.
     const destGltfPath = await convertGltf(asset, configDir, absoluteDestPath);

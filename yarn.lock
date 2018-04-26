@@ -291,9 +291,9 @@ glob@^7.0.5, glob@^7.1.2:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-gltf-component-data@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/gltf-component-data/-/gltf-component-data-0.1.0.tgz#691148277f899c953b1b9d9e256761bb6875fd25"
+gltf-component-data@0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/gltf-component-data/-/gltf-component-data-0.1.1.tgz#f3d189833ba25cbb8b9d2862860f90851adf2de0"
   dependencies:
     commander "^2.15.0"
     fs-extra "^5.0.0"

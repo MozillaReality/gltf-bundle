@@ -19,7 +19,7 @@
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "glob-promise": "^3.4.0",
-    "gltf-component-data": "^0.1.0",
+    "gltf-component-data": "0.1.1",
     "gltf-content-hash": "0.5.2",
     "gltf-import-export": "^1.0.7",
     "gltf-navmesh-generator": "0.3.0",

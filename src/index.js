@@ -169,10 +169,16 @@ async function convertGltf(asset, configDir, destPath) {
   switch (ext) {
     case ".fbx":
       const args = (asset["FBX2glTF"] && asset["FBX2glTF"].args) || [];
-      const fbxDestPath = await fbx2gltf(srcPath, destGltfPath, args);
-      // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
-      // https://github.com/facebookincubator/FBX2glTF/issues/91
-      await fs.move(path.join(destPath, name + "_out"), destPath);
+      try {
+        const fbxDestPath = await fbx2gltf(srcPath, destGltfPath, args);
+        // TODO: Hack for FBX2glTF. When exporting as .gltf, destPath  is actually destPath + fileName + "_out"
+        // https://github.com/facebookincubator/FBX2glTF/issues/91
+        await fs.move(path.join(destPath, name + "_out"), destPath);
+      } catch (e) {
+        console.error(`Error in FBX2glTF converting file: ${srcPath}`);
+        throw e;
+      }
+
       break;
     case ".gltf":
       await copyGltfFiles(srcPath, destPath);

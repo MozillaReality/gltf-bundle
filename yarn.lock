@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@robertlong/fbx2gltf@^0.10.3":
-  version "0.10.3"
-  resolved "https://registry.yarnpkg.com/@robertlong/fbx2gltf/-/fbx2gltf-0.10.3.tgz#b71270e16cd4fcf649302281530aebfa2e8cf6d9"
+"@robertlong/fbx2gltf@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@robertlong/fbx2gltf/-/fbx2gltf-0.11.0.tgz#b6be0a692312a73223ecf8f4d4781887abeea281"
   dependencies:
     rimraf "^2.6.2"
 

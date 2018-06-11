@@ -58,12 +58,18 @@ async function execute() {
     configPath = "";
   }
 
-  if (configPath) {
-    configPath = configPath.endsWith("/") ? configPath : configPath + "/";
-    globPath = configPath + globPath;
-  }
+  let matches;
 
-  const matches = await glob(globPath, { absolute: true });
+  if (configPath.endsWith(".bundle.config.json")) {
+    matches = [configPath];
+  } else {
+    if (configPath) {
+      configPath = configPath.endsWith("/") ? configPath : configPath + "/";
+      globPath = configPath + globPath;
+    }
+
+    matches = await glob(globPath, { absolute: true });
+  }
 
   for (const match of matches) {
     const [bundlePath, versionedBundlePath] = await createBundle(

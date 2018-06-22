@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require("commander");
-const createBundle = require("../src/index");
+const { createFromBundleConfig } = require("../src/index");
 const fs = require("fs-extra");
 const path = require("path");
 const glob = require("glob-promise");
@@ -72,7 +72,7 @@ async function execute() {
   }
 
   for (const match of matches) {
-    const [bundlePath, versionedBundlePath] = await createBundle(
+    const [bundlePath, versionedBundlePath] = await createFromBundleConfig(
       match,
       outPath
     );

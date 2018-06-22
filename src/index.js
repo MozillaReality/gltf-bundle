@@ -9,27 +9,28 @@ const generateNavMeshJSON = require("gltf-navmesh-generator");
 const { contentHashUrls, contentHashAndCopy } = require("gltf-content-hash");
 var Ajv = require("ajv");
 
-module.exports = async function createBundle(configPath, destPath) {
-  if (!fs.existsSync(configPath)) {
-    throw new Error(`config file: ${configPath} does not exist`);
-  }
-
-  let absoluteDestPath = path.resolve(destPath);
-
+module.exports.createBundle = async function createBundle(
+  config,
+  configDir,
+  destPath
+) {
   const schema = await fs.readJson(
     path.join(__dirname, "..", "schema", "gltf-bundle-config.json")
   );
-  const config = await fs.readJson(configPath);
 
   const ajv = new Ajv();
   ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-06.json"));
   const valid = ajv.validate(schema, config);
   if (!valid) {
     const message = ajv.errors.map(e => "  " + e.message).join("\n");
-    throw `${configPath} invalid:\n${message}`;
+    throw `Bundle config invalid:\n${message}`;
   }
 
-  const configDir = path.dirname(configPath);
+  let absoluteDestPath = path.resolve(destPath);
+
+  if (config.output && config.output.filePath) {
+    absoluteDestPath = path.join(absoluteDestPath, config.output.filePath);
+  }
 
   const bundle = {
     name: config.name,
@@ -38,14 +39,10 @@ module.exports = async function createBundle(configPath, destPath) {
     assets: []
   };
 
-  if (config.output && config.output.filePath) {
-    absoluteDestPath = path.join(absoluteDestPath, config.output.filePath);
-  }
-
   if (bundle.meta && bundle.meta.images) {
     for (const image of bundle.meta.images) {
       image.srcset = await contentHashAndCopy(
-        path.join(configDir, image.srcset),
+        path.resolve(configDir, image.srcset),
         absoluteDestPath
       );
     }
@@ -151,6 +148,23 @@ module.exports = async function createBundle(configPath, destPath) {
   return [bundlePath, versionedBundlePath];
 };
 
+module.exports.createFromBundleConfig = async function createFromBundleConfig(
+  configPath,
+  destPath
+) {
+  if (!fs.existsSync(configPath)) {
+    throw new Error(`config file: ${configPath} does not exist`);
+  }
+
+  let absoluteDestPath = path.resolve(destPath);
+
+  const config = await fs.readJson(configPath);
+
+  const configDir = path.dirname(configPath);
+
+  return createBundle(config, configDir, destPath);
+};
+
 async function getComponentData(configDir, componentObjOrUrl) {
   if (typeof componentObjOrUrl === "string") {
     return await fs.readJson(path.join(configDir, componentObjOrUrl));
@@ -160,7 +174,7 @@ async function getComponentData(configDir, componentObjOrUrl) {
 }
 
 async function convertGltf(asset, configDir, destPath) {
-  const srcPath = path.join(configDir, asset.src);
+  const srcPath = path.resolve(configDir, asset.src);
   const { ext, name } = path.parse(srcPath);
   const destGltfPath = path.join(destPath, name + ".gltf");
 

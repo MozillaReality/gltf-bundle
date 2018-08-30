@@ -162,7 +162,7 @@ module.exports.createFromBundleConfig = async function createFromBundleConfig(
 
   const configDir = path.dirname(configPath);
 
-  return createBundle(config, configDir, destPath);
+  return module.exports.createBundle(config, configDir, destPath);
 };
 
 async function getComponentData(configDir, componentObjOrUrl) {

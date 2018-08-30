@@ -21,7 +21,6 @@
     "gltf-component-data": "0.1.1",
     "gltf-content-hash": "0.5.2",
     "gltf-import-export": "^1.0.7",
-    "gltf-navmesh-generator": "0.3.0",
     "gltf-unlit-generator": "^0.3.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "gltf-bundle",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "bin": "./bin/gltf-bundle",
   "main": "src/index.js",
   "license": "MPL-2.0",
@@ -9,8 +9,7 @@
     "url": "https://github.com/MozillaReality/gltf-bundle.git"
   },
   "scripts": {
-    "start": "node ./bin/gltf-bundle",
-    "test": "mocha"
+    "start": "node ./bin/gltf-bundle"
   },
   "dependencies": {
     "@robertlong/fbx2gltf": "^0.11.0",
@@ -22,7 +21,6 @@
     "gltf-component-data": "0.1.1",
     "gltf-content-hash": "0.5.2",
     "gltf-import-export": "^1.0.7",
-    "gltf-navmesh-generator": "0.3.0",
     "gltf-unlit-generator": "^0.3.0"
   }
 }

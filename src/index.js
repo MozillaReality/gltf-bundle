@@ -5,7 +5,6 @@ const fbx2gltf = require("@robertlong/fbx2gltf");
 const { ConvertGLBtoGltf } = require("gltf-import-export");
 const addComponentData = require("gltf-component-data");
 const generateUnlitTextures = require("gltf-unlit-generator");
-const generateNavMeshJSON = require("gltf-navmesh-generator");
 const { contentHashUrls, contentHashAndCopy } = require("gltf-content-hash");
 var Ajv = require("ajv");
 
@@ -77,35 +76,6 @@ module.exports.createBundle = async function createBundle(
       }
     }
 
-    if (
-      !(asset["gltf-navmesh-generator"] && asset["gltf-navmesh-generator"].skip)
-    ) {
-      if (gltf.nodes) {
-        for (const node of gltf.nodes) {
-          if (
-            node.extras &&
-            node.extras.components &&
-            node.extras.components["nav-mesh"] !== undefined
-          ) {
-            const { dir, name } = path.parse(destGltfPath);
-            const navmeshPath = path.join(dir, name + "_navmesh.json");
-
-            await generateNavMeshJSON(destGltfPath, navmeshPath, node.name);
-
-            const navMeshFilename = await contentHashAndCopy(
-              navmeshPath,
-              absoluteDestPath,
-              true
-            );
-
-            node.extras.components["nav-mesh"] = {
-              src: navMeshFilename
-            };
-          }
-        }
-      }
-    }
-
     await fs.remove(destGltfPath);
 
     const {
@@ -162,7 +132,7 @@ module.exports.createFromBundleConfig = async function createFromBundleConfig(
 
   const configDir = path.dirname(configPath);
 
-  return createBundle(config, configDir, destPath);
+  return module.exports.createBundle(config, configDir, destPath);
 };
 
 async function getComponentData(configDir, componentObjOrUrl) {
